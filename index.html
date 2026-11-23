@@ -5,21 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="manifest" href="manifest.json"/>
-    <title>Progressive Web Aapp Template</title>
+     <link rel="stylesheet" href="style.css">
+    <title>Meme Generator</title>
   </head>
   <body>
-    <h1>Progrssive Web App (PWA) Template</h1>
-    <h2>What is a Progressive Web App ?</h2>
-    A Progressive Web App is a web app that delivers an app-like experience to users by using modern web capabilities. In the end, it's just your regular website that runs in a browser with some enhancements. It gives you the ability:
-    <p>Progressive web apps are a way to bring that native app feeling to a traditional web app. With PWAs we can enhance our website with mobile app features which increase usability and offer a great user experience.</p>
-    
-    <ul>
-        <li>To install it on a mobile home screen</li>
-        <li>To access it when offline</li>
-        <li>To access the camera</li>
-        <li>To get push notifications</li>
-        <li>To do background synchronization</li>
-    </ul>
+    <header>
+    <div>
+      <h1>Meme Generator</h1>
+    </div>
+  </header>
+  <main class="app">
+    <aside class="controls">
+      <!-- Image Input & Resize -->
+      <div class="section">
+        <h2 class="section-title">1. Image &amp; Resize</h2>
+        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload or paste an image">
+          <strong>Click to upload, drag &amp; drop, or paste (Ctrl/Cmd+V)</strong>
+          <span>Supports PNG, JPG, WebP, GIF</span>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" />
+
+        <div>
+          <label class="field-label" for="imageScale">
+            <span>Image Scale</span>
+            <span class="val" id="imageScaleVal">100%</span>
+          </label>
+          <input type="range" id="imageScale" min="10" max="200" step="5" value="100" disabled />
+          <div class="field-sub">
+            <span id="imageDimsVal">No image loaded</span>
+            <button type="button" id="resetScale" class="link-btn" disabled>Reset 100%</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Strip -->
+      <div class="section">
+        <h2 class="section-title">2. Top Strip</h2>
+        <div>
+          <label class="field-label" for="topText">Top Text (supports line breaks)</label>
+          <textarea id="topText" placeholder="Enter top text&#10;Line 2..."></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="topHeight">
+            <span>Top Strip Height</span>
+            <span class="val" id="topHeightVal">110px</span>
+          </label>
+          <input type="range" id="topHeight" min="0" max="400" value="110" />
+        </div>
+        <div class="color-row">
+          <div class="color-box">
+            <span>Background</span>
+            <input type="color" id="topBg" value="#ffffff" />
+          </div>
+          <div class="color-box">
+            <span>Text Color</span>
+            <input type="color" id="topFg" value="#000000" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Strip -->
+      <div class="section">
+        <h2 class="section-title">3. Bottom Strip</h2>
+        <div>
+          <label class="field-label" for="bottomText">Bottom Text (supports line breaks)</label>
+          <textarea id="bottomText" placeholder="Enter bottom text&#10;Line 2..."></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="bottomHeight">
+            <span>Bottom Strip Height</span>
+            <span class="val" id="bottomHeightVal">110px</span>
+          </label>
+          <input type="range" id="bottomHeight" min="0" max="400" value="110" />
+        </div>
+        <div class="color-row">
+          <div class="color-box">
+            <span>Background</span>
+            <input type="color" id="bottomBg" value="#ffffff" />
+          </div>
+          <div class="color-box">
+            <span>Text Color</span>
+            <input type="color" id="bottomFg" value="#000000" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="section">
+        <h2 class="section-title">4. Typography</h2>
+        <div>
+          <label class="field-label" for="fontSize">
+            <span>Font Size</span>
+            <span class="val" id="fontSizeVal">36px</span>
+          </label>
+          <input type="range" id="fontSize" min="14" max="110" value="36" />
+        </div>
+        <div>
+          <label class="field-label" for="fontFamily">Font Family</label>
+          <select id="fontFamily">
+            <option value="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">Impact / Condensed</option>
+            <option value="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" selected>System Sans</option>
+            <option value="Georgia, 'Times New Roman', serif">Classic Serif</option>
+            <option value="'Courier New', Courier, monospace">Monospace</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Export & Copy -->
+      <div class="section">
+        <h2 class="section-title">5. Export &amp; Copy</h2>
+        <div class="actions">
+          <button class="action-btn" id="exportPng" disabled>Export PNG</button>
+          <button class="action-btn" id="exportJpg" disabled>Export JPG</button>
+          <button class="action-btn secondary full" id="copyImg" disabled>Copy Image to Clipboard</button>
+        </div>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </div>
+    </aside>
+
+    <section class="preview-panel">
+      <div class="canvas-wrap">
+        <canvas id="memeCanvas"></canvas>
+        <div id="emptyState" class="empty-state">
+          <p><strong>No image loaded yet</strong></p>
+          <p>Upload a file or press <strong>Ctrl+V</strong> / <strong>Cmd+V</strong> anywhere to paste an image.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Copyright __killercodes 2026</span>
+    <span id="themeToggle" class="theme-text" role="button" tabindex="0" aria-label="Switch color theme">Theme: Light</span>
+  </footer>
     <script src="app.js"></script>
   </body>
 </html>
